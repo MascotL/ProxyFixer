@@ -1,18 +1,14 @@
-#include <cstdlib>  // For system() function
+#include <cstdlib>
+#include <Windows.h> 
 
-#ifdef _WIN32
-    #include <Windows.h>  // For Windows registry functions
-#endif
 
 void disableSystemProxy() {
-#ifdef _WIN32
-    // Windows-specific code
+
+    // Hide console window
+    HWND hWnd = GetConsoleWindow();
+    ShowWindow(hWnd, SW_HIDE);
+    // ShowWindow(hWnd, SW_SHOW);
     std::system("reg add \"HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings\" /v ProxyEnable /t REG_DWORD /d 0 /f");
-#else
-    // Unix-like systems (Linux, Mac, etc.)
-    std::system("unset http_proxy");
-    std::system("unset https_proxy");
-#endif
 }
 
 int main() {
