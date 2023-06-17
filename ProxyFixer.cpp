@@ -14,6 +14,6 @@ bool disableSystemProxy() {
 }
 
 int main() {
-    disableSystemProxy()
+    disableSystemProxy();
     return 0;
 }
