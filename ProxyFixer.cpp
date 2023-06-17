@@ -1,11 +1,19 @@
 #include <cstdlib>
 #include <Windows.h>
 
-void disableSystemProxy() {
-    std::system("reg add \"HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings\" /v ProxyEnable /t REG_DWORD /d 0 /f");
+bool disableSystemProxy() {
+    HKEY hKey;
+    DWORD dwValue = 0;
+    LONG result = RegOpenKeyEx(HKEY_CURRENT_USER, "Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings", 0, KEY_SET_VALUE, &hKey);
+    if (result == ERROR_SUCCESS) {
+        result = RegSetValueEx(hKey, "ProxyEnable", 0, REG_DWORD, (BYTE*)&dwValue, sizeof(dwValue));
+        RegCloseKey(hKey);
+        if (result != ERROR_SUCCESS) return false;
+    } else return false;
+    return true;
 }
 
 int main() {
-    disableSystemProxy();
+    disableSystemProxy()
     return 0;
 }
